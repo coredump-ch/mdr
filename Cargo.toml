@@ -1,0 +1,8 @@
+[package]
+name = "mdr"
+version = "0.1.0"
+authors = ["Danilo Bargen <mail@dbrgn.ch>"]
+
+[dependencies]
+hoedown = "3.0"
+ansi_term = "0.6"
