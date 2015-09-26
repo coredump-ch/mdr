@@ -42,6 +42,11 @@ impl Render for AnsiTerm {
         true // Why?
     }
 
+    fn html_block(&mut self, output: &mut Buffer, text: &Buffer) {
+        output.pipe(text);
+        output.write(&[0x0a]);
+    }
+
 }
 
 /// Read file contents, return them as a string.
