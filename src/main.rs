@@ -60,6 +60,19 @@ impl Render for AnsiTerm {
         output.write(&[0x0a]);
     }
 
+    fn link(&mut self, output: &mut Buffer, content: &Buffer, link: &Buffer, title: &Buffer) -> bool {
+        // Read text and target from buffers
+        let text = content.to_str().unwrap();
+        let target = link.to_str().unwrap();
+
+        // Format text and target
+        let formatted_text = Colour::Cyan.underline().paint(&text);
+        let formatted_target = Colour::Red.paint(&target);
+
+        output.write(&format!("[{}]({})", formatted_text, formatted_target).to_string().into_bytes());
+        true // Why?
+    }
+
 }
 
 /// Read file contents, return them as a string.
