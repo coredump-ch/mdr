@@ -48,6 +48,13 @@ impl Render for AnsiTerm {
         true // Why?
     }
 
+    fn triple_emphasis(&mut self, output: &mut Buffer, content: &Buffer) -> bool {
+        let text = content.to_str().unwrap();
+        let formatted = Colour::White.bold().underline().paint(&text);
+        output.write(&formatted.to_string().into_bytes());
+        true // Why?
+    }
+
     fn html_block(&mut self, output: &mut Buffer, text: &Buffer) {
         output.pipe(text);
         output.write(&[0x0a]);
