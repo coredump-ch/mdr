@@ -25,7 +25,7 @@ impl Render for AnsiTerm {
 
     fn paragraph(&mut self, output: &mut Buffer, content: &Buffer) {
         output.pipe(content);
-        output.write(&[0x0a]);
+        output.write(&[0x0a, 0x0a]);
     }
 
     fn emphasis(&mut self, output: &mut Buffer, content: &Buffer) -> bool {
