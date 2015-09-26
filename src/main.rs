@@ -1,7 +1,9 @@
 extern crate hoedown;
 extern crate ansi_term;
 
-use std::io::Write;
+use std::io::{Read, Write};
+use std::fs::File;
+use std::{env, process};
 use hoedown::{Markdown, Html, Buffer};
 use hoedown::renderer::{html, Render};
 use ansi_term::Colour::{White, Yellow};
@@ -42,9 +44,36 @@ impl Render for AnsiTerm {
 
 }
 
+/// Read file contents, return them as a string.
+fn get_file_contents(filepath: &str) -> Result<String, String> {
+    let mut file = try!(File::open(filepath).map_err(|msg| format!("Could not open file: {}", msg)));
+
+    let mut s = String::new();
+    try!(file.read_to_string(&mut s).map_err(|msg| format!("Could not read file: {}", msg)));
+
+    Ok(s)
+}
+
 fn main() {
-    let doc = Markdown::new("# hey there!\nSome _emphasis_ **is** required.");
+    // Parse arguments
+    let args: Vec<_> = env::args().collect();
+    if args.len() != 2 {
+        println!("Usage: {} /path/to/markdownfile.md", args[0]);
+        process::exit(1);
+    }
+
+    // Read file contents
+    let text = get_file_contents(&args[1]).unwrap_or_else(|msg| {
+        println!("{}", msg);
+        process::exit(1);
+    });
+
+    // Parse markdown
+    let md = Markdown::new(&text);
+
+    // Create AnsiTerm instance
     let mut terminal = AnsiTerm { name: "uxterm".to_string() };
     
-    println!("{}", terminal.render(&doc).to_str().unwrap());
+    // Print formatted contents to terminal
+    println!("{}", terminal.render(&md).to_str().unwrap());
 }
