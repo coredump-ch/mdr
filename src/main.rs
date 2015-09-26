@@ -3,11 +3,11 @@ extern crate ansi_term;
 
 use std::io::{Read, Write};
 use std::fs::File;
+use std::iter::repeat;
 use std::{env, process};
 use hoedown::{Markdown, Html, Buffer};
 use hoedown::renderer::{html, Render};
-use ansi_term::Colour::{White, Yellow};
-use ansi_term::Style;
+use ansi_term::{Colour, Style};
 
 
 struct AnsiTerm {
@@ -17,9 +17,15 @@ struct AnsiTerm {
 impl Render for AnsiTerm {
 
     fn header(&mut self, output: &mut Buffer, content: &Buffer, level: i32) {
+        // Get prefix and text
+        let prefix = repeat("#").take(level as usize).collect::<String>();
         let text = content.to_str().unwrap();
-        let header = format!("# {}\n\n", text);
-        let formatted = Yellow.bold().paint(&header);
+
+        // Combine prefix and text
+        let header = format!("{} {}\n\n", prefix, text);
+
+        // Format and write to terminal
+        let formatted = Colour::Yellow.bold().paint(&header);
         output.write(&formatted.to_string().into_bytes());
     }
 
@@ -30,14 +36,14 @@ impl Render for AnsiTerm {
 
     fn emphasis(&mut self, output: &mut Buffer, content: &Buffer) -> bool {
         let text = content.to_str().unwrap();
-        let formatted = White.italic().paint(&text);
+        let formatted = Colour::White.italic().paint(&text);
         output.write(&formatted.to_string().into_bytes());
         true // Why?
     }
 
     fn double_emphasis(&mut self, output: &mut Buffer, content: &Buffer) -> bool {
         let text = content.to_str().unwrap();
-        let formatted = White.bold().paint(&text);
+        let formatted = Colour::White.bold().paint(&text);
         output.write(&formatted.to_string().into_bytes());
         true // Why?
     }
