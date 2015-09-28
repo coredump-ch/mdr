@@ -6,7 +6,7 @@ use std::fs::File;
 use std::iter::repeat;
 use std::{env, process};
 use hoedown::{Markdown, Html, Buffer};
-use hoedown::renderer::{html, Render};
+use hoedown::renderer::{html, list, Render};
 use ansi_term::{Colour, Style};
 
 
@@ -79,6 +79,16 @@ impl Render for AnsiTerm {
         output.write(&formatted.to_string().into_bytes());
         true // Why?
     }
+
+    fn list(&mut self, output: &mut Buffer, content: &Buffer, flags: list::List) {
+        output.pipe(&content);
+    }
+
+    fn list_item(&mut self, output: &mut Buffer, content: &Buffer, flags: list::List) {
+        output.write(&"- ".as_bytes());
+        output.pipe(&content);
+    }
+
 
 }
 
