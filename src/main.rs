@@ -128,7 +128,7 @@ fn main() {
 
     // Create AnsiTerm instance
     let mut terminal = AnsiTerm { name: "uxterm".to_string() };
-    
+
     // Print formatted contents to terminal
     println!("{}", terminal.render(&md).to_str().unwrap());
 }
