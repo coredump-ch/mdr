@@ -80,6 +80,13 @@ impl Render for AnsiTerm {
         true // Why?
     }
 
+    fn code_block(&mut self, output: &mut Buffer, text: &Buffer, lang: &Buffer) {
+        let text = text.to_str().unwrap().trim();
+        let formatted = Colour::Fixed(251).on(Colour::Fixed(235)).paint(&text);
+        output.write(&formatted.to_string().into_bytes());
+        output.write(&[0x0a, 0x0a]);
+    }
+
     fn list(&mut self, output: &mut Buffer, content: &Buffer, flags: list::List) {
         output.pipe(&content);
     }
