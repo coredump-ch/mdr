@@ -12,6 +12,13 @@ use ansi_term::{Colour, Style};
 
 struct AnsiTerm {
     name: String,
+    list_counter: u32,
+}
+
+impl AnsiTerm {
+    fn new(name: String) -> AnsiTerm {
+        AnsiTerm {name: name, list_counter: 0}
+    }
 }
 
 impl Render for AnsiTerm {
@@ -89,10 +96,16 @@ impl Render for AnsiTerm {
 
     fn list(&mut self, output: &mut Buffer, content: &Buffer, flags: list::List) {
         output.pipe(&content);
+        self.list_counter = 0;
     }
 
     fn list_item(&mut self, output: &mut Buffer, content: &Buffer, flags: list::List) {
-        output.write(&"- ".as_bytes());
+        if flags.contains(list::ORDERED) {
+            self.list_counter += 1;
+            output.write(&format!(" {}. ", self.list_counter).as_bytes());
+        } else {
+            output.write(&"- ".as_bytes());
+        }
         output.pipe(&content);
     }
 
@@ -127,7 +140,7 @@ fn main() {
     let md = Markdown::new(&text);
 
     // Create AnsiTerm instance
-    let mut terminal = AnsiTerm { name: "uxterm".to_string() };
+    let mut terminal = AnsiTerm::new("uxterm".to_string());
 
     // Print formatted contents to terminal
     println!("{}", terminal.render(&md).to_str().unwrap());
