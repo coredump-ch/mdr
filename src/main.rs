@@ -73,6 +73,13 @@ impl Render for AnsiTerm {
         true // Why?
     }
 
+    fn code_span(&mut self, output: &mut Buffer, text: &Buffer) -> bool {
+        let text = text.to_str().unwrap();
+        let formatted = Colour::Black.on(Colour::White).paint(&text);
+        output.write(&formatted.to_string().into_bytes());
+        true // Why?
+    }
+
 }
 
 /// Read file contents, return them as a string.
