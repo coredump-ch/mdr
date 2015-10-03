@@ -9,13 +9,21 @@ This is some text with *emphasis*, **double emphasis** and ***triple emphasis***
 There is also a list:
 
  * item a
+   * sub-item a
+   * sub-item b
  * item b
+   1. sub-item x
+   1. sub-item y
  * item c
 
 And an enumeration:
 
  1. item 1
+   * sub-item a
+   * sub-item b
  1. item 2
+   1. sub item x
+   1. sub item y
  1. item 3
 
 > Quotes should also be supported.
